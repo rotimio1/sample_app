@@ -2,6 +2,16 @@
 #
 # Table name: users
 #
+#  id              :integer          not null, primary key
+#  name            :string(255)
+#  email           :string(255)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  password_digest :string(255)
+#
+
+# Table name: users
+#
 #  id         :integer          not null, primary key
 #  name       :string(255)
 #  email      :string(255)
@@ -12,11 +22,8 @@
 require 'spec_helper'
 describe User do
 before do
-@user = User.new(name: "Example User", email: "user@example.com", 
-				password: "foobar", password_confirmation: "foobar")
+	@user = User.new(name: "Example User", email: "user@example.com", password: "foobar", password_confirmation: "foobar")
 end
-subject { @user }
-
 
 it { should respond_to(:authenticate) }
 
@@ -41,7 +48,7 @@ describe "when name is too long" do
 before { @user.name = "a" * 51 }
 it { should_not be_valid }
 end
-end
+
 describe "when email format is invalid" do
 it "should be invalid" do
 addresses = %w[user@foo,com user_at_foo.org example.user@foo.
@@ -84,13 +91,16 @@ end
 describe "return value of authenticate method" do
 before { @user.save }
 let(:found_user) { User.find_by_email(@user.email) }
+
 describe "with valid password" do
 it { should == found_user.authenticate(@user.password) }
 end
 describe "with invalid password" do
 let(:user_for_invalid_password) { found_user.authenticate("invalid") }
+
 it { should_not == user_for_invalid_password }
 specify { user_for_invalid_password.should be_false }
+end
 end
 end
 
