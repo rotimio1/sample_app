@@ -49,8 +49,6 @@ describe "Authentication" do
         it { should_not have_link("profile") }
         it { should_not have_link("settings") }   
       end
-    end  
-  end
 
   describe "authorization" do
    
@@ -68,7 +66,7 @@ describe "Authentication" do
         describe "after signing in" do
 
           it "should render the desired protected page" do
-            authentication_pagespage.should have_selector('title', text: 'Edit user')
+            page.should have_selector('title', text: 'Edit user')
         end
 
         describe "when signing in again" do
@@ -84,10 +82,10 @@ describe "Authentication" do
             page.should have_selector('title', text: user.name)
           end
         end
-      end    
+      end
     end
-
-  describe "in the Users controller" do 
+      
+   describe "in the Users controller" do 
 
       describe "visiting the edit page" do
         before { visit edit_user_path(user) }
@@ -104,6 +102,19 @@ describe "Authentication" do
         it { should have_selector('title', text: 'Sign in') }
       end
     end  
+    
+    describe "in the Microposts controller" do
+    
+      describe "submitting to the create action" do
+        before { post microposts_path }
+        specify { response.should redirect_to(signin_path) }
+      end
+
+      describe "submitting to the destroy action" do
+        before { delete micropost_path(FactoryGirl.create(:micropost)) }
+        specify { response.should redirect_to(signin_path) }
+      end
+    end
   end
   
   describe "as wrong user" do
@@ -132,6 +143,6 @@ describe "Authentication" do
         before { delete user_path(user) }
         specify { response.should redirect_to(root_path) }
       end
-    end   
-  end
-end 
+    end 
+  end 
+end
