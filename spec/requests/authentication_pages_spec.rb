@@ -44,15 +44,19 @@ describe "Authentication" do
 
       describe "followed by signout" do 
         before { click_link "sign out" } 
-        it { should have_link('Sign in') }     
+        it { should have_link('Sign in') }
+        it { should_not have_link("sign out") }
+        it { should_not have_link("profile") }
+        it { should_not have_link("settings") }   
       end
-  
+    end  
+  end
 
   describe "authorization" do
    
     describe "for non-signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
-   authentication_pages
+ 
       describe "when attempting to visit a protected page" do 
         before do
           visit edit_user_path(user)
@@ -82,8 +86,7 @@ describe "Authentication" do
         end
       end    
     end
-  end
-    
+
   describe "in the Users controller" do 
 
       describe "visiting the edit page" do
@@ -100,7 +103,9 @@ describe "Authentication" do
         before { visit users_path }
         it { should have_selector('title', text: 'Sign in') }
       end
-
+    end  
+  end
+  
   describe "as wrong user" do
     let(:user) { FactoryGirl.create(:user) }
     let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
