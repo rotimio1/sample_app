@@ -37,6 +37,23 @@ describe "Micropost Pages" do
 	  it "should delete a micropost" do
 	 	expect { click_link "delete" }.to change(Micropost, :count).by(-1)
 	  end
+	
+	describe "microposts pagination test" do
+  	  let(:user) { FactoryGirl.create(:user) }
+     	before do 
+    	visit user_path(user)
+    	31.times { FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum") }
+  	  end
+
+  	  after { user.microposts.delete_all }
+
+  	  it { should have_selector('div', class: 'pagination') }
+
+  	  it "should list each micropost" do
+      	user.microposts.paginate(page: 1).each do |micropost|
+      	 page.should have_selector('span', text: micropost.content)
+        end
+  	  end
 	end
   end
 end
