@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe UsersController do
 
-  describe "GET 'show'"	do
-	it "should not show delete links for the microposts" do
+  describe "GET 'show'" do
+  it "should not show delete links for the microposts" do
      mp1 = Factory(:micropost, :user => @user, :content => "Foo bar")
      mp2 = Factory(:micropost, :user => @user, :content => "Joe Ricco")
      get :show, :id => @user

@@ -24,5 +24,3 @@ private
 	redirect_to root_url if @micropost.nil?
     end
 end
-
-end
